@@ -38,49 +38,61 @@ const FirstPage = () => {
     // Timeline per animazioni sequenziali
     const tl = gsap.timeline();
 
-    // Animazione per testo1 con scale easing
+    // Animazione per testo1 - effetto LEGO
     tl.fromTo(
       ".testo1",
       {
-        scale: 0,
+        y: 200, // Parte da sotto
         opacity: 0,
+        rotation: -15, // Leggermente ruotato
+        scale: 0.8,
       },
       {
-        scale: 1,
+        y: 0, // Arriva nella posizione finale
         opacity: 1,
-        duration: 0.6,
-        ease: "back.out(1.7)", // Effetto di rimbalzo
+        rotation: 0, // Si raddrizza
+        scale: 1,
+        duration: 0.8,
+        ease: "bounce.out(1.2)", // Effetto di rimbalzo come un mattoncino LEGO
       }
     )
-      // Animazione per testo2
+      // Animazione per testo2 - effetto LEGO
       .fromTo(
         ".testo2",
         {
-          scale: 0,
+          y: 200,
           opacity: 0,
+          rotation: 15,
+          scale: 0.8,
         },
         {
-          scale: 1,
+          y: 0,
           opacity: 1,
-          duration: 0.6,
-          ease: "back.out(1.7)",
+          rotation: 10, // Mantiene la rotazione finale
+          scale: 1,
+          duration: 0.8,
+          ease: "bounce.out(1.2)",
         },
-        "-=0.2"
-      ) // Inizia 0.2 secondi prima che finisca il precedente
-      // Animazione per testo3
+        "-=0.3"
+      ) // Inizia 0.3 secondi prima che finisca il precedente
+      // Animazione per testo3 - effetto LEGO
       .fromTo(
         ".testo3",
         {
-          scale: 0,
+          y: 200,
           opacity: 0,
+          rotation: -10,
+          scale: 0.8,
         },
         {
-          scale: 1,
+          y: 0,
           opacity: 1,
-          duration: 0.6,
-          ease: "back.out(1.7)",
+          rotation: -4, // Mantiene la rotazione finale
+          scale: 1,
+          duration: 0.8,
+          ease: "bounce.out(1.2)",
         },
-        "-=0.2"
+        "-=0.3"
       )
       // Animazione per Quadrato
       .fromTo(
