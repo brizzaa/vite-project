@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/* Font Nohemi locale */
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-Thin-BF6438cc577ef3b.otf")
+    format("opentype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-ExtraLight-BF6438cc57e06d5.otf")
+    format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-Light-BF6438cc5702321.woff")
+    format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-Regular-BF6438cc579d934.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-Medium-BF6438cc57ddecd.woff")
+    format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-SemiBold-BF6438cc57db2ff.woff")
+    format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-Bold-BF6438cc577b524.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-ExtraBold-BF6438cc5761ae2.woff")
+    format("woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Font/Nohemi-Black-BF6438cc565e67b.woff")
+    format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Applicazione del font a tutto il progetto */
+* {
+  font-family: "Nohemi", sans-serif;
+}
+
+body {
+  font-family: "Nohemi", sans-serif;
+}
+
+.hero-bg {
+  height: 100vh;
+  width: 100vw;
+  background-color: #fffca2;
+}
+
+.hero-card {
+  background-color: #ffe055;
+  height: 80%;
+  width: 80%;
+  box-shadow: 12px 10px 0px 0px #000000;
+}
+
+.hero-text {
+  font-size: 7rem;
+  font-weight: 600;
+  color: #000000;
+  box-shadow: 12px 10px 0px 0px #000000;
+}
