@@ -5,6 +5,11 @@ const Circle = () => (
     height="174"
     fill="none"
     viewBox="0 0 174 174"
+    style={{
+      willChange: "transform",
+      transform: "translateZ(0)",
+      backfaceVisibility: "hidden",
+    }}
   >
     <rect
       width="165"
@@ -15,6 +20,11 @@ const Circle = () => (
       stroke="#000"
       strokeWidth="9"
       rx="82.5"
+      style={{
+        willChange: "transform",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+      }}
     ></rect>
   </svg>
 );

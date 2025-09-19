@@ -5,12 +5,22 @@ const Quadrato = () => (
     height="174"
     fill="none"
     viewBox="0 0 174 174"
+    style={{
+      willChange: "transform",
+      transform: "translateZ(0)",
+      backfaceVisibility: "hidden",
+    }}
   >
     <path
       fill="#FF9DEF"
       stroke="#000"
       strokeWidth="9"
       d="M4.5 4.5h165v165H4.5z"
+      style={{
+        willChange: "transform",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+      }}
     ></path>
   </svg>
 );

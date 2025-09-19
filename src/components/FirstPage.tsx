@@ -1,117 +1,86 @@
 import Circle from "./bits/Circle";
 import Quadrato from "./bits/Quadrato";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Star from "./bits/Star";
 import { useEffect, useRef } from "react";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+// Optimize ScrollTrigger performance
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+  autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+});
 
 const FirstPage = () => {
   const quadratoRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  // Funzioni per animazioni di click sui bits
   const handleQuadratoClick = () => {
+    // Kill any existing animation to prevent conflicts
+    gsap.killTweensOf(quadratoRef.current);
     gsap.to(quadratoRef.current, {
       rotation: "+=720", // 2 giri completi
-      duration: 0.8,
-      ease: "power2.out",
+      duration: 1.2,
+      ease: "elastic.out(1, 0.6)",
+      transformOrigin: "center center",
+      onComplete: () => {
+        // Reset rotation to prevent accumulation
+        gsap.set(quadratoRef.current, { rotation: 0 });
+      },
     });
   };
 
   const handleStarClick = () => {
+    // Kill any existing animation to prevent conflicts
+    gsap.killTweensOf(starRef.current);
     gsap.to(starRef.current, {
       rotation: "+=1080", // 3 giri completi
-      duration: 1,
-      ease: "power2.out",
+      duration: 1.4,
+      ease: "back.out(1.7)",
+      transformOrigin: "center center",
+      onComplete: () => {
+        // Reset rotation to prevent accumulation
+        gsap.set(starRef.current, { rotation: 90 });
+      },
     });
   };
 
   const handleCircleClick = () => {
+    // Kill any existing animation to prevent conflicts
+    gsap.killTweensOf(circleRef.current);
     gsap.to(circleRef.current, {
       rotation: "+=900", // 2.5 giri completi
-      duration: 0.9,
-      ease: "power2.out",
+      duration: 1.3,
+      ease: "power3.out",
+      transformOrigin: "center center",
+      onComplete: () => {
+        // Reset rotation to prevent accumulation
+        gsap.set(circleRef.current, { rotation: 0 });
+      },
     });
   };
 
-  // Scroll animation for SVG elements
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
+    // Kill any existing timeline to prevent conflicts
+    if (timelineRef.current) {
+      timelineRef.current.kill();
+    }
 
-      // Calculate scroll progress (0 to 1)
-      const scrollProgress = Math.min(scrollY / (windowHeight * 2), 1);
-
-      // Move SVG elements based on scroll - MOVIMENTI 5X ESAGERATI
-      if (quadratoRef.current) {
-        gsap.to(quadratoRef.current, {
-          x: scrollProgress * -4000, // Move left 5X ESAGERATO
-          y: scrollProgress * -3000, // Move up 5X ESAGERATO
-          rotation: scrollProgress * 1800, // Rotate 5X more
-          duration: 0.1,
-          ease: "none",
-        });
-      }
-
-      if (starRef.current) {
-        gsap.to(starRef.current, {
-          x: scrollProgress * 3500, // Move right 5X ESAGERATO
-          y: scrollProgress * -2500, // Move up 5X ESAGERATO
-          rotation: scrollProgress * -1200, // Rotate 5X more
-          duration: 0.1,
-          ease: "none",
-        });
-      }
-
-      if (circleRef.current) {
-        gsap.to(circleRef.current, {
-          x: scrollProgress * -3000, // Move left 5X ESAGERATO
-          y: scrollProgress * 2000, // Move down 5X ESAGERATO
-          rotation: scrollProgress * 900, // Rotate 5X more
-          duration: 0.1,
-          ease: "none",
-        });
-      }
-
-      // Move text boxes based on scroll - MOVIMENTI 5X ESAGERATI
-      gsap.to(".testo1", {
-        x: scrollProgress * -6000, // Move left 5X ESAGERATO
-        y: scrollProgress * -4000, // Move up 5X ESAGERATO
-        duration: 0.1,
-        ease: "none",
-      });
-
-      gsap.to(".testo2", {
-        x: scrollProgress * 5000, // Move right 5X ESAGERATO
-        y: scrollProgress * -4500, // Move up 5X ESAGERATO
-        duration: 0.1,
-        ease: "none",
-      });
-
-      gsap.to(".testo3", {
-        x: scrollProgress * -4500, // Move left 5X ESAGERATO
-        y: scrollProgress * 3500, // Move down 5X ESAGERATO
-        duration: 0.1,
-        ease: "none",
-      });
-    };
-
-    // Add scroll listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Initial call to set starting positions
-    handleScroll();
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
     // Timeline per animazioni sequenziali
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Clean up timeline reference when complete
+        timelineRef.current = null;
+      },
+    });
+
+    // Store timeline reference
+    timelineRef.current = tl;
 
     // Nascondi inizialmente tutte le lettere con scaling ESAGERATO
     gsap.set(".letter", { scale: 0, y: 100, rotation: 360, opacity: 0 });
@@ -132,8 +101,8 @@ const FirstPage = () => {
         opacity: 1,
         rotation: 0, // Si raddrizza
         scale: 1,
-        duration: 0.8,
-        ease: "bounce.out(1.2)", // Effetto di rimbalzo come un mattoncino LEGO
+        duration: 1.0,
+        ease: "back.out(1.4)", // Effetto più fluido e naturale
       }
     )
       // Animazione per testo2 - effetto LEGO
@@ -150,11 +119,11 @@ const FirstPage = () => {
           opacity: 1,
           rotation: 10, // Mantiene la rotazione finale
           scale: 1,
-          duration: 0.8,
-          ease: "bounce.out(1.2)",
+          duration: 1.0,
+          ease: "back.out(1.4)",
         },
-        "-=0.3"
-      ) // Inizia 0.3 secondi prima che finisca il precedente
+        "-=0.4"
+      ) // Inizia 0.4 secondi prima che finisca il precedente
       // Animazione per testo3 - effetto LEGO
       .fromTo(
         ".testo3",
@@ -169,10 +138,10 @@ const FirstPage = () => {
           opacity: 1,
           rotation: -4, // Mantiene la rotazione finale
           scale: 1,
-          duration: 0.8,
-          ease: "bounce.out(1.2)",
+          duration: 1.0,
+          ease: "back.out(1.4)",
         },
-        "-=0.3"
+        "-=0.4"
       )
       // Animazione per Quadrato
       .fromTo(
@@ -186,10 +155,10 @@ const FirstPage = () => {
           scale: 1,
           opacity: 1,
           rotation: 0,
-          duration: 0.8,
-          ease: "back.out(1.7)",
+          duration: 1.0,
+          ease: "elastic.out(1, 0.8)",
         },
-        "-=0.3"
+        "-=0.4"
       )
       // Animazione per Star
       .fromTo(
@@ -203,10 +172,10 @@ const FirstPage = () => {
           scale: 1,
           opacity: 1,
           rotation: 90,
-          duration: 0.8,
-          ease: "back.out(1.7)",
+          duration: 1.1,
+          ease: "elastic.out(1, 0.6)",
         },
-        "-=0.2"
+        "-=0.3"
       )
       // Animazione per Circle
       .fromTo(
@@ -220,10 +189,10 @@ const FirstPage = () => {
           scale: 1,
           opacity: 1,
           rotation: 0,
-          duration: 0.8,
-          ease: "back.out(1.7)",
+          duration: 1.1,
+          ease: "elastic.out(1, 0.7)",
         },
-        "-=0.2"
+        "-=0.3"
       )
       // Animazione typewriter per "Bringing your" - rivela le lettere una per una
       .to(
@@ -233,11 +202,11 @@ const FirstPage = () => {
           y: 0,
           rotation: 0,
           opacity: 1,
-          duration: 0.3,
-          stagger: 0.05, // Ritardo minore tra ogni lettera
-          ease: "elastic.out(1, 0.3)",
+          duration: 0.4,
+          stagger: 0.08, // Ritardo ottimizzato per fluidità
+          ease: "back.out(1.2)",
         },
-        "-=0.3"
+        "-=0.2"
       ) // Inizia subito dopo l'effetto LEGO
       // Animazione typewriter per "Ideas" - in parallelo
       .to(
@@ -247,9 +216,9 @@ const FirstPage = () => {
           y: 0,
           rotation: 0,
           opacity: 1,
-          duration: 0.3,
-          stagger: 0.05,
-          ease: "elastic.out(1, 0.3)",
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "back.out(1.2)",
         },
         "-=0.1"
       ) // Inizia quasi subito dopo "Bringing your"
@@ -261,9 +230,9 @@ const FirstPage = () => {
           y: 0,
           rotation: 0,
           opacity: 1,
-          duration: 0.3,
-          stagger: 0.05,
-          ease: "elastic.out(1, 0.3)",
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "back.out(1.2)",
         },
         "-=0.1"
       ) // Inizia quasi subito dopo "Ideas"
@@ -272,7 +241,106 @@ const FirstPage = () => {
       // Timeline principale completata
       .call(() => {
         console.log("Timeline principale completata");
+        // Trigger scroll animations setup after entrance animation is complete
+        setTimeout(() => {
+          const windowHeight = window.innerHeight;
+          const windowWidth = window.innerWidth;
+
+          // Now set up scroll animations from the final positions - SMOOTH BACK EASING
+          if (quadratoRef.current) {
+            gsap.to(quadratoRef.current, {
+              x: -windowWidth * 0.6, // Reduced distance for faster exit
+              y: -windowHeight * 0.6, // Reduced distance for faster exit
+              ease: "back.inOut", // Clean back easing without extra parameters
+              scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "center center", // Shorter scroll distance
+                scrub: 0.3, // Even faster scrub
+                id: "quadrato-scroll",
+              },
+            });
+          }
+
+          if (starRef.current) {
+            gsap.to(starRef.current, {
+              x: windowWidth * 0.6, // Reduced distance for faster exit
+              y: -windowHeight * 0.6, // Reduced distance for faster exit
+              ease: "back.inOut", // Clean back easing without extra parameters
+              scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "center center", // Shorter scroll distance
+                scrub: 0.3, // Even faster scrub
+                id: "star-scroll",
+              },
+            });
+          }
+
+          if (circleRef.current) {
+            gsap.to(circleRef.current, {
+              x: windowWidth * 0.6, // Changed direction to go right-down (opposite side)
+              y: windowHeight * 0.6, // Changed direction to go down-right
+              ease: "back.inOut", // Clean back easing without extra parameters
+              scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "center center", // Shorter scroll distance
+                scrub: 0.3, // Even faster scrub
+                id: "circle-scroll",
+              },
+            });
+          }
+
+          // Text boxes scroll animations - SMOOTH BACK EASING
+          gsap.to(".testo1", {
+            x: -windowWidth * 0.7, // Reduced distance for faster exit
+            y: -windowHeight * 0.7, // Reduced distance for faster exit
+            ease: "back.inOut", // Clean back easing without extra parameters
+            scrollTrigger: {
+              trigger: "body",
+              start: "top top",
+              end: "center center", // Shorter scroll distance
+              scrub: 0.3, // Even faster scrub
+              id: "testo1-scroll",
+            },
+          });
+
+          gsap.to(".testo2", {
+            x: windowWidth * 0.7, // Reduced distance for faster exit
+            y: -windowHeight * 0.7, // Reduced distance for faster exit
+            ease: "back.inOut", // Clean back easing without extra parameters
+            scrollTrigger: {
+              trigger: "body",
+              start: "top top",
+              end: "center center", // Shorter scroll distance
+              scrub: 0.3, // Even faster scrub
+              id: "testo2-scroll",
+            },
+          });
+
+          gsap.to(".testo3", {
+            x: -windowWidth * 0.7, // Reduced distance for faster exit
+            y: windowHeight * 0.7, // Reduced distance for faster exit
+            ease: "back.inOut", // Clean back easing without extra parameters
+            scrollTrigger: {
+              trigger: "body",
+              start: "top top",
+              end: "center center", // Shorter scroll distance
+              scrub: 0.3, // Even faster scrub
+              id: "testo3-scroll",
+            },
+          });
+        }, 500); // Small delay to ensure entrance animation is fully complete
       });
+
+    // Cleanup function
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+    };
   }, []);
   return (
     <div className="hero-bg h-screen w-full flex items-center justify-center absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_9px,transparent_3px)] [background-size:16px_16px]">

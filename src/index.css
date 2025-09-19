@@ -120,31 +120,41 @@ html {
 /* Ensure proper overflow handling for scroll effects */
 body {
   overflow-x: hidden;
+  /* Optimize for smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
-/* Hover effects for interactive bits - no transitions to avoid GSAP conflicts */
+/* Hover effects for interactive bits - optimized for smooth animations */
+.quadrato-bit,
+.star-bit,
+.circle-bit {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
 .quadrato-bit:hover {
-  transform: scale(1.2);
+  transform: scale(1.1) translateZ(0);
 }
 
 .quadrato-bit:hover svg {
-  transform: scale(1.2);
+  transform: scale(1.1) translateZ(0);
 }
 
 .star-bit:hover {
-  transform: scale(1.2);
+  transform: scale(1.1) translateZ(0);
 }
 
 .star-bit:hover svg {
-  transform: scale(1.2);
+  transform: scale(1.1) translateZ(0);
 }
 
 .circle-bit:hover {
-  transform: scale(1.2);
+  transform: scale(1.1) translateZ(0);
 }
 
 .circle-bit:hover svg {
-  transform: scale(1.2);
+  transform: scale(1.1) translateZ(0);
 }
 
 /* Move "To life" text 20px down within the box using padding */
@@ -158,7 +168,9 @@ body {
 .letter-life {
   display: inline-block;
   transition: none; /* Disable CSS transitions to avoid conflicts with GSAP */
-  will-change: transform, scale, rotation; /* Optimize for animations */
+  will-change: transform, scale, rotation, opacity; /* Optimize for animations */
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Improve rendering performance */
 }
 
 /* Add shadow effects during animation */
@@ -175,18 +187,61 @@ body {
   transform-origin: center center;
 }
 
-/* SVG elements scroll animation styles */
+/* SVG elements scroll animation styles - OPTIMIZED FOR SMOOTH ANIMATIONS */
 .quadrato-bit,
 .star-bit,
 .circle-bit {
-  will-change: transform;
+  will-change: transform, rotation, scale;
   transform-origin: center center;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Improve rendering performance */
+  transition: none; /* Disable CSS transitions to avoid conflicts with GSAP */
+}
+
+/* SVG elements inside bits - optimize for smooth animations */
+.quadrato-bit svg,
+.star-bit svg,
+.circle-bit svg {
+  will-change: transform, rotation, scale;
+  transform-origin: center center;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Improve rendering performance */
+  transition: none; /* Disable CSS transitions to avoid conflicts with GSAP */
+  shape-rendering: optimizeSpeed; /* Optimize SVG rendering for animations */
+  vector-effect: non-scaling-stroke; /* Keep stroke width consistent during scaling */
+}
+
+/* Additional SVG optimization for smooth animations */
+.quadrato-bit svg path,
+.star-bit svg path,
+.circle-bit svg rect {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: none;
 }
 
 /* Text boxes scroll animation styles */
 .testo1,
 .testo2,
 .testo3 {
-  will-change: transform;
+  will-change: transform, rotation, scale;
   transform-origin: center center;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Improve rendering performance */
+}
+
+/* Slider text scroll animation styles */
+.slider-text {
+  will-change: transform, rotation, scale;
+  font-size: 4rem;
+  box-shadow: 8px 6px 0px 0px #000000;
+  font-weight: 400;
+  border-style: solid;
+  border-width: 4px;
+  border-color: #000000;
+  transform-origin: center center;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Improve rendering performance */
+  transition: none; /* Disable CSS transitions to avoid conflicts with GSAP */
 }
