@@ -468,7 +468,7 @@ const FirstPage = ({ triggerScrollAnimations = false }: FirstPageProps) => {
     }
   }, [triggerScrollAnimations, elementsAnimated]);
   return (
-    <div className="hero-bg h-screen w-full flex items-center justify-center absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_9px,transparent_3px)] [background-size:16px_16px]">
+    <div className="hero-bg h-screen w-full flex items-center justify-center absolute inset-0 -z-10 bg-[radial-gradient(#efe7ec_10px,transparent_8px)] [background-size:16px_20px]">
       <div className="hero-card flex flex-col items-center justify-center border-8 rounded-[100px]">
         <h1 className="hero-text testo1 bg-[#70AEFF] border-10 px-20 mb-8 leading-40 mt-10">
           <span className="letter">B</span>
