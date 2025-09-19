@@ -42,11 +42,11 @@ const SecondPage = () => {
           </div>
         </div>
         <div
-          className="about-card h-180 w-300 bg-[#FFFCA2] right-100 top-65 absolute border-6 z-10"
+          className="about-card h-180 w-300 bg-[#FFFCA2] right-100 top-65 absolute border-6 z-10 "
           style={{ overflow: "hidden" }}
         >
           <div
-            className="bg-white absolute "
+            className="bg-white absolute foto "
             style={{
               zIndex: 1,
               width: "20%",
@@ -64,7 +64,7 @@ const SecondPage = () => {
             ></img>
           </div>
           <div
-            className="mt-10 bg-black h-40 w-110 absolute left-10 text-white text-[9rem] font-bold text-center leading-45"
+            className="mt-10 bg-black h-40 w-110 absolute left-10 text-white text-[9rem] font-bold text-center leading-45 text-luca"
             style={{ zIndex: 10 }}
           >
             LUCA
@@ -78,7 +78,29 @@ const SecondPage = () => {
           <div className="absolute left-107 top-15 antialiased z-40">
             <Star2 />
           </div>
-          <div className="bg-white absolute left-180 h-70 w-70 rounded-full"></div>
+          <div
+            className="about-card-2 bg-white absolute mt-125 left-155 h-40 w-130 rounded-full flex flex-col items-center justify-center leading-[1]"
+            style={{ boxShadow: "8px 8px 0px 0px #000000" }}
+          >
+            <div className="text-[3rem] font-bold text-center">
+              FULL STACK <br />
+              WEB-DEVELOPER
+            </div>
+            <div className="text-[2rem] font-light text-center">
+              Based in Veneto(IT)
+            </div>
+          </div>
+          <div
+            className="h-100 w-100 bg-white absolute left-170 top-10 text-center leading-[1] text-[2.6rem] font-light px-4 about-card-2"
+            style={{ boxShadow: "8px 8px 0px 0px #000000" }}
+          >
+            <div className="mt-10 ">
+              A young web developer with a passion for graphic design!
+              <br />
+              <br />
+              currently looking new challenges!
+            </div>
+          </div>
         </div>
       </div>
     </div>
