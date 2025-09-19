@@ -94,6 +94,8 @@ body {
   height: 100vh;
   width: 100vw;
   background-color: #fffca2;
+  overflow: hidden; /* Clipping per il box Ideas */
+  position: relative; /* Per il posizionamento assoluto del box che cade */
 }
 
 .hero-card {
@@ -108,4 +110,83 @@ body {
   font-weight: 600;
   color: #000000;
   box-shadow: 12px 10px 0px 0px #000000;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure proper overflow handling for scroll effects */
+body {
+  overflow-x: hidden;
+}
+
+/* Hover effects for interactive bits - no transitions to avoid GSAP conflicts */
+.quadrato-bit:hover {
+  transform: scale(1.2);
+}
+
+.quadrato-bit:hover svg {
+  transform: scale(1.2);
+}
+
+.star-bit:hover {
+  transform: scale(1.2);
+}
+
+.star-bit:hover svg {
+  transform: scale(1.2);
+}
+
+.circle-bit:hover {
+  transform: scale(1.2);
+}
+
+.circle-bit:hover svg {
+  transform: scale(1.2);
+}
+
+/* Move "To life" text 20px down within the box using padding */
+.testo3 {
+  padding-top: 20px;
+}
+
+/* Enhanced animation styles for letters */
+.letter,
+.letter-ideas,
+.letter-life {
+  display: inline-block;
+  transition: none; /* Disable CSS transitions to avoid conflicts with GSAP */
+  will-change: transform, scale, rotation; /* Optimize for animations */
+}
+
+/* Add shadow effects during animation */
+.letter:hover,
+.letter-ideas:hover,
+.letter-life:hover {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure letters are positioned for animation */
+.letter,
+.letter-ideas,
+.letter-life {
+  transform-origin: center center;
+}
+
+/* SVG elements scroll animation styles */
+.quadrato-bit,
+.star-bit,
+.circle-bit {
+  will-change: transform;
+  transform-origin: center center;
+}
+
+/* Text boxes scroll animation styles */
+.testo1,
+.testo2,
+.testo3 {
+  will-change: transform;
+  transform-origin: center center;
 }
