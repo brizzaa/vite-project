@@ -3,22 +3,22 @@ import Quadrato from "./bits/Quadrato";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Star from "./bits/Star";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// Optimize ScrollTrigger performance
-ScrollTrigger.config({
-  ignoreMobileResize: true,
-  autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
-});
+interface FirstPageProps {
+  triggerScrollAnimations?: boolean;
+}
 
-const FirstPage = () => {
+const FirstPage = ({ triggerScrollAnimations = false }: FirstPageProps) => {
   const quadratoRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const scrollAnimationsRef = useRef<gsap.core.Timeline | null>(null);
+  const [elementsAnimated, setElementsAnimated] = useState(false);
 
   const handleQuadratoClick = () => {
     // Kill any existing animation to prevent conflicts
@@ -241,97 +241,7 @@ const FirstPage = () => {
       // Timeline principale completata
       .call(() => {
         console.log("Timeline principale completata");
-        // Trigger scroll animations setup after entrance animation is complete
-        setTimeout(() => {
-          const windowHeight = window.innerHeight;
-          const windowWidth = window.innerWidth;
-
-          // Now set up scroll animations from the final positions - SMOOTH BACK EASING
-          if (quadratoRef.current) {
-            gsap.to(quadratoRef.current, {
-              x: -windowWidth * 0.6, // Reduced distance for faster exit
-              y: -windowHeight * 0.6, // Reduced distance for faster exit
-              ease: "back.inOut", // Clean back easing without extra parameters
-              scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "center center", // Shorter scroll distance
-                scrub: 0.3, // Even faster scrub
-                id: "quadrato-scroll",
-              },
-            });
-          }
-
-          if (starRef.current) {
-            gsap.to(starRef.current, {
-              x: windowWidth * 0.6, // Reduced distance for faster exit
-              y: -windowHeight * 0.6, // Reduced distance for faster exit
-              ease: "back.inOut", // Clean back easing without extra parameters
-              scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "center center", // Shorter scroll distance
-                scrub: 0.3, // Even faster scrub
-                id: "star-scroll",
-              },
-            });
-          }
-
-          if (circleRef.current) {
-            gsap.to(circleRef.current, {
-              x: windowWidth * 0.6, // Changed direction to go right-down (opposite side)
-              y: windowHeight * 0.6, // Changed direction to go down-right
-              ease: "back.inOut", // Clean back easing without extra parameters
-              scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "center center", // Shorter scroll distance
-                scrub: 0.3, // Even faster scrub
-                id: "circle-scroll",
-              },
-            });
-          }
-
-          // Text boxes scroll animations - SMOOTH BACK EASING
-          gsap.to(".testo1", {
-            x: -windowWidth * 0.7, // Reduced distance for faster exit
-            y: -windowHeight * 0.7, // Reduced distance for faster exit
-            ease: "back.inOut", // Clean back easing without extra parameters
-            scrollTrigger: {
-              trigger: "body",
-              start: "top top",
-              end: "center center", // Shorter scroll distance
-              scrub: 0.3, // Even faster scrub
-              id: "testo1-scroll",
-            },
-          });
-
-          gsap.to(".testo2", {
-            x: windowWidth * 0.7, // Reduced distance for faster exit
-            y: -windowHeight * 0.7, // Reduced distance for faster exit
-            ease: "back.inOut", // Clean back easing without extra parameters
-            scrollTrigger: {
-              trigger: "body",
-              start: "top top",
-              end: "center center", // Shorter scroll distance
-              scrub: 0.3, // Even faster scrub
-              id: "testo2-scroll",
-            },
-          });
-
-          gsap.to(".testo3", {
-            x: -windowWidth * 0.7, // Reduced distance for faster exit
-            y: windowHeight * 0.7, // Reduced distance for faster exit
-            ease: "back.inOut", // Clean back easing without extra parameters
-            scrollTrigger: {
-              trigger: "body",
-              start: "top top",
-              end: "center center", // Shorter scroll distance
-              scrub: 0.3, // Even faster scrub
-              id: "testo3-scroll",
-            },
-          });
-        }, 500); // Small delay to ensure entrance animation is fully complete
+        // Scroll animations will be triggered programmatically
       });
 
     // Cleanup function
@@ -342,6 +252,221 @@ const FirstPage = () => {
       }
     };
   }, []);
+
+  // Cleanup scroll animations
+  useEffect(() => {
+    return () => {
+      if (scrollAnimationsRef.current) {
+        scrollAnimationsRef.current.kill();
+        scrollAnimationsRef.current = null;
+      }
+      // Reset state when component unmounts
+      setElementsAnimated(false);
+    };
+  }, []);
+
+  // Effect to trigger scroll animations programmatically
+  useEffect(() => {
+    if (triggerScrollAnimations && !elementsAnimated) {
+      // Kill any existing scroll animations and reset state
+      if (scrollAnimationsRef.current) {
+        scrollAnimationsRef.current.kill();
+        scrollAnimationsRef.current = null;
+      }
+
+      const windowHeight = window.innerHeight;
+      const windowWidth = window.innerWidth;
+
+      // Create scroll animations timeline
+      const scrollTl = gsap.timeline({
+        onComplete: () => {
+          setElementsAnimated(true);
+          scrollAnimationsRef.current = null;
+        },
+      });
+      scrollAnimationsRef.current = scrollTl;
+
+      // Animate elements based on scroll effect
+      if (quadratoRef.current) {
+        scrollTl.to(
+          quadratoRef.current,
+          {
+            x: -windowWidth * 0.6,
+            y: -windowHeight * 0.6,
+            duration: 1.5,
+            ease: "back.inOut",
+          },
+          0
+        );
+      }
+
+      if (starRef.current) {
+        scrollTl.to(
+          starRef.current,
+          {
+            x: windowWidth * 0.6,
+            y: -windowHeight * 0.6,
+            duration: 1.5,
+            ease: "back.inOut",
+          },
+          0
+        );
+      }
+
+      if (circleRef.current) {
+        scrollTl.to(
+          circleRef.current,
+          {
+            x: windowWidth * 0.6,
+            y: windowHeight * 0.6,
+            duration: 1.5,
+            ease: "back.inOut",
+          },
+          0
+        );
+      }
+
+      // Text boxes animations
+      scrollTl.to(
+        ".testo1",
+        {
+          x: -windowWidth * 0.7,
+          y: -windowHeight * 0.7,
+          duration: 1.5,
+          ease: "back.inOut",
+        },
+        0
+      );
+
+      scrollTl.to(
+        ".testo2",
+        {
+          x: windowWidth * 0.7,
+          y: -windowHeight * 0.7,
+          duration: 1.5,
+          ease: "back.inOut",
+        },
+        0
+      );
+
+      scrollTl.to(
+        ".testo3",
+        {
+          x: -windowWidth * 0.7,
+          y: windowHeight * 0.7,
+          duration: 1.5,
+          ease: "back.inOut",
+        },
+        0
+      );
+    } else if (!triggerScrollAnimations && elementsAnimated) {
+      // Reset elements to original positions when returning to first page
+      if (scrollAnimationsRef.current) {
+        scrollAnimationsRef.current.kill();
+        scrollAnimationsRef.current = null;
+      }
+
+      // Create reset animation timeline
+      const resetTl = gsap.timeline({
+        onComplete: () => {
+          setElementsAnimated(false);
+          scrollAnimationsRef.current = null;
+        },
+      });
+
+      // Animate elements back to original positions
+      if (quadratoRef.current) {
+        resetTl.to(
+          quadratoRef.current,
+          {
+            x: 0,
+            y: 0,
+            duration: 1.2,
+            ease: "back.out(1.7)",
+          },
+          0
+        );
+      }
+
+      if (starRef.current) {
+        resetTl.to(
+          starRef.current,
+          {
+            x: 0,
+            y: 0,
+            duration: 1.2,
+            ease: "back.out(1.7)",
+          },
+          0
+        );
+      }
+
+      if (circleRef.current) {
+        resetTl.to(
+          circleRef.current,
+          {
+            x: 0,
+            y: 0,
+            duration: 1.2,
+            ease: "back.out(1.7)",
+          },
+          0
+        );
+      }
+
+      // Text boxes reset animations
+      resetTl.to(
+        ".testo1",
+        {
+          x: 0,
+          y: 0,
+          duration: 1.2,
+          ease: "back.out(1.7)",
+        },
+        0
+      );
+
+      resetTl.to(
+        ".testo2",
+        {
+          x: 0,
+          y: 0,
+          duration: 1.2,
+          ease: "back.out(1.7)",
+        },
+        0
+      );
+
+      resetTl.to(
+        ".testo3",
+        {
+          x: 0,
+          y: 0,
+          duration: 1.2,
+          ease: "back.out(1.7)",
+        },
+        0
+      );
+    }
+  }, [triggerScrollAnimations, elementsAnimated]);
+
+  // Reset state when component becomes visible again
+  useEffect(() => {
+    if (!triggerScrollAnimations && elementsAnimated) {
+      // Kill any existing animations first
+      if (scrollAnimationsRef.current) {
+        scrollAnimationsRef.current.kill();
+        scrollAnimationsRef.current = null;
+      }
+
+      // Small delay to ensure smooth transition
+      const timer = setTimeout(() => {
+        setElementsAnimated(false);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [triggerScrollAnimations, elementsAnimated]);
   return (
     <div className="hero-bg h-screen w-full flex items-center justify-center absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_9px,transparent_3px)] [background-size:16px_16px]">
       <div className="hero-card flex flex-col items-center justify-center border-8 rounded-[100px]">

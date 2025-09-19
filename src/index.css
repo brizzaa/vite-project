@@ -174,11 +174,6 @@ body {
 }
 
 /* Add shadow effects during animation */
-.letter:hover,
-.letter-ideas:hover,
-.letter-life:hover {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
 
 /* Ensure letters are positioned for animation */
 .letter,
@@ -244,4 +239,178 @@ body {
   transform: translateZ(0); /* Force hardware acceleration */
   backface-visibility: hidden; /* Improve rendering performance */
   transition: none; /* Disable CSS transitions to avoid conflicts with GSAP */
+}
+
+/* Infinite scrolling carousel styles */
+.carousel {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+  align-items: center; /* Centra verticalmente */
+}
+
+.carousel-track {
+  display: inline-flex;
+  align-items: center; /* Centra verticalmente gli elementi */
+  animation: scroll 20s linear infinite;
+  gap: 1.75rem; /* 28px gap between items */
+}
+
+/* Rimuoviamo la pausa al hover per movimento continuo */
+
+/* Keyframes for infinite scrolling */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Ensure smooth animation */
+.carousel-track {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 3D Canvas Wrapper Styles */
+.canvas-3d-container {
+  perspective: 1000px;
+  perspective-origin: center center;
+  transform-style: preserve-3d;
+  overflow: hidden;
+}
+
+.page-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition: none; /* Disable CSS transitions to avoid conflicts with JS animations */
+}
+
+.first-page-3d {
+  z-index: 1;
+}
+
+.second-page-3d {
+  z-index: 2;
+}
+
+/* Enhanced 3D effects for smooth transitions */
+.page-3d * {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Optimize 3D rendering performance */
+.canvas-3d-container,
+.page-3d,
+.page-3d * {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* 3D Portal Styles */
+.portal-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition: none; /* Disable CSS transitions to avoid conflicts with JS animations */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.portal-3d * {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Smooth scroll behavior for 3D effects */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow: hidden; /* Completely disable scrolling */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  height: 100vh; /* Single viewport height */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow: hidden; /* Disable scroll on html as well */
+  height: 100vh;
+}
+
+/* Ensure no scrollbars anywhere */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+/* Page Wrapper Styles for Overlapping Transitions */
+.page-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: none; /* Disable touch scrolling */
+}
+
+.app-container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.page-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+}
+
+/* Enhanced overlapping transition effects */
+.page-container.transitioning {
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.8s ease-in-out, z-index 0s linear;
+}
+
+/* Overlap effect - pages slide over each other */
+.page-container.overlapping {
+  transform: translateX(0);
+  z-index: 30;
+}
+
+.page-container.sliding-out {
+  transform: translateX(-100%);
+  z-index: 10;
+  opacity: 0.8;
+}
+
+.page-container.sliding-in {
+  transform: translateX(0);
+  z-index: 20;
+  opacity: 1;
+}
+
+.page-container.hidden {
+  transform: translateX(100%);
+  z-index: 0;
+  opacity: 0;
+}
+
+.about-card {
+  box-shadow: 8px 8px 0px 0px #000000;
 }
